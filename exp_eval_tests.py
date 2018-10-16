@@ -34,6 +34,5 @@ class test_expressions(unittest.TestCase):
         
     def test_prefix_to_postfix(self):
         self.assertEqual(prefix_to_postfix("* - 3 / 2 1 - / 4 5 6"), "3 2 1 / - 4 5 / 6 - *")
-
 if __name__ == "__main__":
     unittest.main()

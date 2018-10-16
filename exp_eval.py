@@ -11,7 +11,30 @@ def postfix_eval(input_str):
     are space separated.  Tokens are either operators + - * / ^ or numbers
     Returns the result of the expression evaluation. 
     Raises an PostfixFormatException if the input is not well-formed"""
-    pass
+    operators = ["<<", ">>", "**", "*", "/", "+", "-"]
+    equation = input_str.split()
+    stack = Stack(len(equation))
+    for i in range(len(equation)):
+        if equation[i].isdigit():
+            stack.push(equation[i])
+        elif equation[i] in operators:
+            if stack.size() < 2:
+                raise PostfixFormatException("Insufficient operands")
+            first_num = stack.pop()
+            second_num = stack.pop()
+            if first_num == 0 and equation[i] == "/":
+                raise ValueError
+            total = eval(str(second_num) + str(equation[i]) + str(first_num))
+            if int(total) == total:
+                stack.push(str(int(total)))
+            else:
+                raise PostfixFormatException("Illegal bit shift operand")
+        else:
+            raise PostfixFormatException("Invalid token")
+    if stack.size() > 1:
+        raise PostfixFormatException("Too many operands")
+    return(int(stack.peek()))
+
 
 def infix_to_postfix(input_str):
     """Converts an infix expression to an equivalent postfix expression"""
@@ -19,7 +42,46 @@ def infix_to_postfix(input_str):
     """Input argument:  a string containing an infix expression where tokens are 
     space separated.  Tokens are either operators + - * / ^ parentheses ( ) or numbers
     Returns a String containing a postfix expression """
-    pass
+    order_of_op = {
+    '<<' : 4,
+    '>>' : 4,
+    '**' : 3, 
+    '*' : 2, 
+    '/' : 2, 
+    '+' : 1, 
+    '-' : 1,
+    '(' : 0,
+    ')' : 0
+    }
+    rpn_exp = []
+    equation = input_str.split(' ')
+    stack = Stack(len(equation))
+    for i in range(len(equation)):
+        if equation[i].isdigit():
+            rpn_exp.append(equation[i])
+        elif equation[i] == '(':
+            stack.push(equation[i])
+        elif equation[i] == ')':
+            while stack.peek() != '(':
+                rpn_exp.append(stack.pop())
+            stack.pop()
+        elif equation[i] in order_of_op:
+            for j in range(stack.size(), 0, -1):
+                if order_of_op[stack.items[j-1]] == 0:
+                    break
+                if order_of_op[equation[i]] == 3:
+                    if order_of_op[equation[i]] < order_of_op[stack.items[j-1]]:
+                        rpn_exp.append(stack.pop())
+                elif order_of_op[equation[i]] <= order_of_op[stack.items[j-1]]:
+                    rpn_exp.append(stack.pop())
+            stack.push(equation[i])
+    while stack.size() != 0:
+        rpn_exp.append(stack.pop())
+    return(' '.join(rpn_exp))
+    
+
+
+
 
 
 def prefix_to_postfix(input_str):
@@ -27,6 +89,22 @@ def prefix_to_postfix(input_str):
     """Input argument: a string containing a prefix expression where tokens are 
     space separated.  Tokens are either operators + - * / ^ parentheses ( ) or numbers
     Returns a String containing a postfix expression(tokens are space separated)"""
-    pass
+    equation = input_str.split(' ')
+    stack = Stack(len(equation))
+    for i in range(len(equation)-1, -1, -1):
+        if equation[i].isdigit():
+            stack.push(equation[i])
+        else:
+            op1 = stack.pop()
+            op2 = stack.pop()
+            combine =  op1 + " " + op2 + " " + equation[i]
+            stack.push(combine)
+    return(stack.peek())
 
 
+
+
+#postfix_eval('6 7 8 9 2 3 + 1 - 1 + 4 * 5 / + - + *')
+#postfix_eval('5 1 2 + 4 ** + 3 -')
+#infix_to_postfix('3 + 4 * 2 / ( 1 - 5 ) ** 2 ** 3')
+#prefix_to_postfix('* - 3 / 2 1 - / 4 5 6')

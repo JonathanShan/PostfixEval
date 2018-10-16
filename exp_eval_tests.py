@@ -45,6 +45,8 @@ class test_expressions(unittest.TestCase):
         except PostfixFormatException as e:
             self.assertEqual(str(e), "Illegal bit shift operand")
 
+    def test_postfix_eval_09(self):
+        self.assertAlmostEqual(postfix_eval('4 1 << 2 **'), 64)
 
     def test_infix_to_postfix_01(self):
         self.assertEqual(infix_to_postfix("6 - 3"), "6 3 -")
@@ -53,8 +55,21 @@ class test_expressions(unittest.TestCase):
     def test_infix_to_postfix_02(self):
         self.assertEqual(infix_to_postfix('3 + 4 * 2 / ( 1 - 5 ) ** 2 ** 3'), "3 4 2 * 1 5 - 2 3 ** ** / +")
 
+    def test_infix_to_postfix_03(self):
+        self.assertEqual(infix_to_postfix('( 10 + 5 - 7 ) / ( 4 / 2 ) * 2 ** 2'), "10 5 + 7 - 4 2 / / 2 2 ** *")
+
+    def test_infix_to_postfix_04(self):
+        self.assertEqual(infix_to_postfix('4 << 1 ** 2'), "4 1 << 2 **")
+
+    def test_infix_to_postfix05(self):
+        self.assertEqual(infix_to_postfix("( 2 + 3 ) * 4 - ( 5 - 6 ) * ( 7 + 8 )"), "2 3 + 4 * 5 6 - 7 8 + * -")
 
     def test_prefix_to_postfix(self):
         self.assertEqual(prefix_to_postfix("* - 3 / 2 1 - / 4 5 6"), "3 2 1 / - 4 5 / 6 - *")
+
+    def test_prefix_to_postfix01(self):
+        self.assertEqual(prefix_to_postfix("+ 3 * 4 5"), "3 4 5 * +")
+
+    
 if __name__ == "__main__":
     unittest.main()

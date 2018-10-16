@@ -80,9 +80,6 @@ def infix_to_postfix(input_str):
     
 
 
-
-
-
 def prefix_to_postfix(input_str):
     """Converts a prefix expression to an equivalent postfix expression"""
     """Input argument: a string containing a prefix expression where tokens are 

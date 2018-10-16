@@ -24,15 +24,18 @@ def postfix_eval(input_str):
             second_num = stack.pop()
             if first_num == "0" and equation[i] == "/":
                 raise ValueError
-            if ("." in first_num or "." in second_num) and (equation[i] == "<<" or equation[i] == ">>"):
+            #elif ("." in first_num or "." in second_num) and (equation[i] == "<<" or equation[i] == ">>"):
+              #  raise PostfixFormatException("Illegal bit shift operand")
+            try:
+                total = eval(str(second_num) + str(equation[i]) + str(first_num))
+            except TypeError:
                 raise PostfixFormatException("Illegal bit shift operand")
-            total = eval(str(second_num) + str(equation[i]) + str(first_num))
             stack.push(str(total))
         else:
             raise PostfixFormatException("Invalid token")
     if stack.size() > 1:
         raise PostfixFormatException("Too many operands")
-    return(float(stack.peek()))
+    return float((stack.peek()))
 
 
 def infix_to_postfix(input_str):
@@ -97,5 +100,11 @@ def prefix_to_postfix(input_str):
             op2 = stack.pop()
             combine =  op1 + " " + op2 + " " + equation[i]
             stack.push(combine)
-    return(stack.peek())
+    return(stack.pop())
 
+#print(prefix_to_postfix("** * 2 / 5 6 8"))
+#print(postfix_eval("3 4 6 ** * 2 5 6 / * 8 ** +"))
+#print(postfix_eval("3 4 6 ** * 2 5 6 / 8 ** * +"))
+#print(infix_to_postfix("( 2 + 3 ) * 4 - ( 5 - 6 ) * ( 7 + 8 )"))
+#postfix_eval("2 3 4 / <<")
+#infix_to_postfix("( 3 * 4 ** 6 + ( 2 * ( 5 / 6 ) ** 8 ) )")

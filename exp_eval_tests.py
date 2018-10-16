@@ -70,6 +70,13 @@ class test_expressions(unittest.TestCase):
     def test_prefix_to_postfix01(self):
         self.assertEqual(prefix_to_postfix("+ 3 * 4 5"), "3 4 5 * +")
 
+    def test_prefix_to_postfix02(self):
+        self.assertEqual(prefix_to_postfix("/ + 2 3 - + 4 9 - 4 1"), "2 3 + 4 9 + 4 1 - - /")
+
+    #def test_prefix_to_postfix03(self):
+       # self.assertEqual(prefix_to_postfix("+ * 3 ** 4 6 ** * 2 / 5 6 8"), "3 4 6 ** * 2 5 6 / 8 ** * +")
+
+
     
 if __name__ == "__main__":
     unittest.main()

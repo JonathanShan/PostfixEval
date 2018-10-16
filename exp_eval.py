@@ -66,13 +66,15 @@ def infix_to_postfix(input_str):
             stack.pop()
         elif equation[i] in order_of_op:
             for j in range(stack.size(), 0, -1):
-                if order_of_op[stack.items[j-1]] == 0:
-                    break
                 if order_of_op[equation[i]] == 3:
                     if order_of_op[equation[i]] < order_of_op[stack.items[j-1]]:
                         rpn_exp.append(stack.pop())
+                    else:
+                        break
                 elif order_of_op[equation[i]] <= order_of_op[stack.items[j-1]]:
                     rpn_exp.append(stack.pop())
+                else:
+                    break
             stack.push(equation[i])
     while stack.size() != 0:
         rpn_exp.append(stack.pop())

@@ -22,18 +22,17 @@ def postfix_eval(input_str):
                 raise PostfixFormatException("Insufficient operands")
             first_num = stack.pop()
             second_num = stack.pop()
-            if first_num == 0 and equation[i] == "/":
+            if first_num == "0" and equation[i] == "/":
                 raise ValueError
-            total = eval(str(second_num) + str(equation[i]) + str(first_num))
-            if int(total) == total:
-                stack.push(str(int(total)))
-            else:
+            if ("." in first_num or "." in second_num) and (equation[i] == "<<" or equation[i] == ">>"):
                 raise PostfixFormatException("Illegal bit shift operand")
+            total = eval(str(second_num) + str(equation[i]) + str(first_num))
+            stack.push(str(total))
         else:
             raise PostfixFormatException("Invalid token")
     if stack.size() > 1:
         raise PostfixFormatException("Too many operands")
-    return(int(stack.peek()))
+    return(float(stack.peek()))
 
 
 def infix_to_postfix(input_str):
@@ -101,10 +100,3 @@ def prefix_to_postfix(input_str):
             stack.push(combine)
     return(stack.peek())
 
-
-
-
-#postfix_eval('6 7 8 9 2 3 + 1 - 1 + 4 * 5 / + - + *')
-#postfix_eval('5 1 2 + 4 ** + 3 -')
-#infix_to_postfix('3 + 4 * 2 / ( 1 - 5 ) ** 2 ** 3')
-#prefix_to_postfix('* - 3 / 2 1 - / 4 5 6')

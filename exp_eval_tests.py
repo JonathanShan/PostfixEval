@@ -6,6 +6,7 @@ from exp_eval import *
 class test_expressions(unittest.TestCase):
     def test_postfix_eval_01(self):
         self.assertAlmostEqual(postfix_eval("3 5 +"), 8)
+        
 
     def test_postfix_eval_02(self):
         try:
@@ -28,10 +29,31 @@ class test_expressions(unittest.TestCase):
         except PostfixFormatException as e:
             self.assertEqual(str(e), "Too many operands")
 
+    def test_postfix_eval_05(self):
+        self.assertAlmostEqual(postfix_eval('6 7 8 9 2 3 + 1 - 1 + 4 * 5 / + - + *'), 12)
+
+    def test_postfix_eval_06(self):
+        self.assertAlmostEqual(postfix_eval('5 1 2 + 4 ** + 3 -'), 83)
+
+    def test_postfix_eval_07(self):
+        self.assertRaises(ValueError, postfix_eval, "3 0 /")
+
+    def test_postfix_eval_08(self):
+        try:
+            postfix_eval("2 3 4 / <<")
+            self.fail()
+        except PostfixFormatException as e:
+            self.assertEqual(str(e), "Illegal bit shift operand")
+
+
     def test_infix_to_postfix_01(self):
         self.assertEqual(infix_to_postfix("6 - 3"), "6 3 -")
         self.assertEqual(infix_to_postfix("6"), "6")
-        
+
+    def test_infix_to_postfix_02(self):
+        self.assertEqual(infix_to_postfix('3 + 4 * 2 / ( 1 - 5 ) ** 2 ** 3'), "3 4 2 * 1 5 - 2 3 ** ** / +")
+
+
     def test_prefix_to_postfix(self):
         self.assertEqual(prefix_to_postfix("* - 3 / 2 1 - / 4 5 6"), "3 2 1 / - 4 5 / 6 - *")
 if __name__ == "__main__":

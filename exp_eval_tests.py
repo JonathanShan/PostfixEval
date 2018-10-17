@@ -48,6 +48,15 @@ class test_expressions(unittest.TestCase):
     def test_postfix_eval_09(self):
         self.assertAlmostEqual(postfix_eval('4 1 << 2 **'), 64)
 
+    def test_postfix_eval_10(self):
+        self.assertAlmostEqual(postfix_eval(""), "")
+
+    def test_postfix_eval_11(self):
+        self.assertAlmostEqual(postfix_eval("10 1 >> 2 + 2 /"), 3.5)
+
+    def test_postfix_eval_12(self):
+        self.assertAlmostEqual(postfix_eval("2 4 2 >> + 4 **"), 81)
+    
     def test_infix_to_postfix_01(self):
         self.assertEqual(infix_to_postfix("6 - 3"), "6 3 -")
         self.assertEqual(infix_to_postfix("6"), "6")

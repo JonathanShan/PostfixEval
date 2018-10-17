@@ -24,8 +24,6 @@ def postfix_eval(input_str):
             second_num = stack.pop()
             if first_num == "0" and equation[i] == "/":
                 raise ValueError
-            #elif ("." in first_num or "." in second_num) and (equation[i] == "<<" or equation[i] == ">>"):
-              #  raise PostfixFormatException("Illegal bit shift operand")
             try:
                 total = eval(str(second_num) + str(equation[i]) + str(first_num))
             except TypeError:
@@ -35,6 +33,8 @@ def postfix_eval(input_str):
             raise PostfixFormatException("Invalid token")
     if stack.size() > 1:
         raise PostfixFormatException("Too many operands")
+    if stack.size() == 0:
+        return ""
     return float((stack.peek()))
 
 
@@ -59,6 +59,8 @@ def infix_to_postfix(input_str):
     equation = input_str.split(' ')
     stack = Stack(len(equation))
     for i in range(len(equation)):
+        if len(input_str) == 0:
+            return ""
         if equation[i].isdigit():
             rpn_exp.append(equation[i])
         elif equation[i] == '(':
@@ -67,14 +69,16 @@ def infix_to_postfix(input_str):
             while stack.peek() != '(':
                 rpn_exp.append(stack.pop())
             stack.pop()
+        elif order_of_op[equation[i]] == 3:
+            for j in range(stack.size()):
+                if order_of_op[equation[i]] < order_of_op[stack.items[j]]:
+                    rpn_exp.append(stack.pop())
+                else:
+                    break
+            stack.push(equation[i])
         elif equation[i] in order_of_op:
-            for j in range(stack.size(), 0, -1):
-                if order_of_op[equation[i]] == 3:
-                    if order_of_op[equation[i]] < order_of_op[stack.items[j-1]]:
-                        rpn_exp.append(stack.pop())
-                    else:
-                        break
-                elif order_of_op[equation[i]] <= order_of_op[stack.items[j-1]]:
+            for k in range(stack.size(), 0, -1):
+                if order_of_op[equation[i]] <= order_of_op[stack.items[k-1]]:
                     rpn_exp.append(stack.pop())
                 else:
                     break
@@ -92,13 +96,13 @@ def prefix_to_postfix(input_str):
     Returns a String containing a postfix expression(tokens are space separated)"""
     equation = input_str.split(' ')
     stack = Stack(len(equation))
-    for i in range(len(equation)-1, -1, -1):
-        if equation[i].isdigit():
-            stack.push(equation[i])
+    for i in range(len(equation), 0, -1):
+        if equation[i-1].isdigit():
+            stack.push(equation[i-1])
         else:
             op1 = stack.pop()
             op2 = stack.pop()
-            combine =  op1 + " " + op2 + " " + equation[i]
+            combine =  op1 + " " + op2 + " " + equation[i-1]
             stack.push(combine)
     return(stack.pop())
 
@@ -108,3 +112,4 @@ def prefix_to_postfix(input_str):
 #print(infix_to_postfix("( 2 + 3 ) * 4 - ( 5 - 6 ) * ( 7 + 8 )"))
 #postfix_eval("2 3 4 / <<")
 #infix_to_postfix("( 3 * 4 ** 6 + ( 2 * ( 5 / 6 ) ** 8 ) )")
+#postfix_eval("4 2 >> 2 +")

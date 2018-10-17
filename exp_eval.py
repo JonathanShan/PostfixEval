@@ -4,6 +4,13 @@ from stack_array import Stack
 class PostfixFormatException(Exception):
     pass
 
+def is_num(x):
+    try:
+        float(x)
+        return True
+    except ValueError:
+        return False
+
 def postfix_eval(input_str):
     """Evaluates a postfix expression"""
 
@@ -15,7 +22,7 @@ def postfix_eval(input_str):
     equation = input_str.split()
     stack = Stack(len(equation))
     for i in range(len(equation)):
-        if equation[i].isdigit():
+        if is_num(equation[i]):
             stack.push(equation[i])
         elif equation[i] in operators:
             if stack.size() < 2:
@@ -61,7 +68,7 @@ def infix_to_postfix(input_str):
     for i in range(len(equation)):
         if len(input_str) == 0:
             return ""
-        if equation[i].isdigit():
+        if is_num(equation[i]):
             rpn_exp.append(equation[i])
         elif equation[i] == '(':
             stack.push(equation[i])
@@ -83,7 +90,7 @@ def infix_to_postfix(input_str):
                 else:
                     break
             stack.push(equation[i])
-    while stack.size() != 0:
+    while stack.size() != 0: 
         rpn_exp.append(stack.pop())
     return(' '.join(rpn_exp))
     
@@ -97,7 +104,7 @@ def prefix_to_postfix(input_str):
     equation = input_str.split(' ')
     stack = Stack(len(equation))
     for i in range(len(equation), 0, -1):
-        if equation[i-1].isdigit():
+        if is_num(equation[i-1]):
             stack.push(equation[i-1])
         else:
             op1 = stack.pop()

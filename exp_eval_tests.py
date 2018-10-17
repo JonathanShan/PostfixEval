@@ -79,6 +79,9 @@ class test_expressions(unittest.TestCase):
     def test_infix_to_postfix07(self):
         self.assertEqual(infix_to_postfix("( 3 * 4 ** 6 + ( 2 * ( 5 / 6 ) ** 8 ) )"), "3 4 6 ** * 2 5 6 / 8 ** * +")
 
+    def test_infix_to_postfix08(self):
+        self.assertEqual(infix_to_postfix("( 4 + 2 - 3 ) * ( 5 / 6 ) - ( 1 - 3 / 5 )"), "4 2 + 3 - 5 6 / * 1 3 5 / - -")
+
     def test_prefix_to_postfix(self):
         self.assertEqual(prefix_to_postfix("* - 3 / 2 1 - / 4 5 6"), "3 2 1 / - 4 5 / 6 - *")
 
@@ -87,6 +90,7 @@ class test_expressions(unittest.TestCase):
 
     def test_prefix_to_postfix02(self):
         self.assertEqual(prefix_to_postfix("/ + 2 3 - + 4 9 - 4 1"), "2 3 + 4 9 + 4 1 - - /")
+
 
     #def test_prefix_to_postfix03(self):
        # self.assertEqual(prefix_to_postfix("+ * 3 ** 4 6 ** * 2 / 5 6 8"), "3 4 6 ** * 2 5 6 / 8 ** * +")
